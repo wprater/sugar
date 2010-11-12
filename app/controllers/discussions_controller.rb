@@ -50,8 +50,10 @@ class DiscussionsController < ApplicationController
 		# Recent discussions
 		def index
 			@discussions = Discussion.find_paginated(
-				:page    => params[:page], 
-				:trusted => (@current_user && @current_user.trusted?)
+			  :condtions => {
+  				:page    => params[:page], 
+  				:trusted => (@current_user && @current_user.trusted?)
+  			}
 			)
 			load_views_for(@discussions)
 		end
