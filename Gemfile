@@ -12,7 +12,7 @@ gem 'rails', '3.0.0'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-gem 'capistrano'
+# gem 'capistrano'
 
 # To use debugger
 # gem 'ruby-debug'
@@ -41,8 +41,8 @@ gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
 gem 'delayed_job', '2.0.3'
-gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
-gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
+# gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
+# gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 if RUBY_VERSION =~ /^1\.8/
 	# Ruby 1.8 version of Ultraviolet
