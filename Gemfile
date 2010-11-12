@@ -31,7 +31,7 @@ gem 'rails', '3.0.0'
 # end
 
 
-gem 'mysql'
+gem 'pg'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
