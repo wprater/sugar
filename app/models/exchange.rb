@@ -66,17 +66,17 @@ class Exchange < ActiveRecord::Base
 		end
 	end
 
-	define_index do
-		indexes title
-		has     type
-		has     poster_id, last_poster_id, category_id
-		has     trusted
-		has     closed
-		has     sticky
-		has     created_at, updated_at, last_post_at, posts_count
-		set_property :delta => :delayed
-		set_property :field_weights => {:title => 2}
-	end
+  # define_index do
+  #   indexes title
+  #   has     type
+  #   has     poster_id, last_poster_id, category_id
+  #   has     trusted
+  #   has     closed
+  #   has     sticky
+  #   has     created_at, updated_at, last_post_at, posts_count
+  #   set_property :delta => :delayed
+  #   set_property :field_weights => {:title => 2}
+  # end
 
 	class << self
 

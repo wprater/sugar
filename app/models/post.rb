@@ -26,14 +26,14 @@ class Post < ActiveRecord::Base
 		post.body_html    = PostParser.parse(post.body) unless post.skip_html
 	end
 	
-	define_index do
-		indexes body
-		indexes user(:username), :as => :username
-		has     user_id, discussion_id
-		has     created_at, updated_at
-		has     trusted, conversation
-		set_property :delta => :delayed
-	end
+  # define_index do
+  #   indexes body
+  #   indexes user(:username), :as => :username
+  #   has     user_id, discussion_id
+  #   has     created_at, updated_at
+  #   has     trusted, conversation
+  #   set_property :delta => :delayed
+  # end
 
 	class << self
 
