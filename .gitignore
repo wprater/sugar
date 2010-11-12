@@ -9,7 +9,6 @@ doc/plugins
 doc/app
 config/deploy.rb
 config/*.sphinx.conf
-config/database.yml
 db/schema.rb
 db/sphinx
 public/cache

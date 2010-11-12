@@ -1,0 +1,20 @@
+development:
+  adapter: mysql
+  username: root
+  password: 
+  database: sugar_dev
+
+test:
+  adapter: mysql
+  username: root
+  password: 
+  database: sugar_test
+
+production: 
+  encoding: unicode
+  adapter: postgresql
+  username: dofavjhqai
+  port: 5432
+  host: ec2-174-129-199-182.compute-1.amazonaws.com
+  database: dofavjhqai
+  password: f5lxx1zz5pnorynqglhzmsp34
