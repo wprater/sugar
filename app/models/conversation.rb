@@ -10,6 +10,10 @@ class Conversation < Exchange
 		ConversationRelationship.create(:user => conversation.poster, :conversation => conversation)
 	end
 
+	define_index do
+    indexes title
+  end
+
 	# Returns true if the user can view this conversation
 	def viewable_by?(user)
 		user && self.participants.include?(user)

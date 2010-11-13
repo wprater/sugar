@@ -25,4 +25,6 @@ Sugar::Application.configure do
 	
 	# Store all page caches in a subfolder of public
 	config.action_controller.page_cache_directory = Rails.root.join('public/cache')
+	
+  require 'indextank_client'
 end

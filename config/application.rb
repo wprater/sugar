@@ -38,6 +38,8 @@ module Sugar
 
 		# Configure sensitive parameters which will be filtered from the log file.
 		config.filter_parameters += [:password, :drawing]
+		
+    # require 'thinkingtank/init'
 	end
 end
 

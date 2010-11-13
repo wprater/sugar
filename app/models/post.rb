@@ -34,7 +34,17 @@ class Post < ActiveRecord::Base
   #   has     trusted, conversation
   #   set_property :delta => :delayed
   # end
-
+  
+  define_index do
+    indexes body
+    # indexes username
+    # indexes user(:username), :as => :username
+    # has     user_id, discussion_id
+    # has     created_at, updated_at
+    # has     trusted, conversation
+    # set_property :delta => :delayed
+  end
+  
 	class << self
 
 		def find_paginated(options={})
@@ -71,8 +81,9 @@ class Post < ActiveRecord::Base
 			search_options[:conditions][:trusted] = false unless options[:trusted]
 			search_options[:conditions][:conversation] = options[:conversation] || false
 			search_options[:conditions][:discussion_id] = options[:discussion_id] if options[:discussion_id]
-			posts = Post.search(options[:query], search_options)
-			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
+			# TODO use the search_options for sort and order
+			posts = Post.search(options[:query])
+			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.length, :page => page, :per_page => POSTS_PER_PAGE))
 		end
 	end
 

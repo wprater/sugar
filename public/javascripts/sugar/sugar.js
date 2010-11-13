@@ -406,9 +406,10 @@ var Sugar = {
 								if (words[words.length - 1].match(/^[\w]{3}[^\*]*$/)) {
 									words[words.length - 1] += '*';
 								}
-								var query = words.join(' | ');
+                                // var query = words.join(' | ');
+								var query = words.join(' OR ');
 								// Load results
-								$.getJSON('/discussions/search.json', {query: query}, function (json) {
+								$.getJSON('/discussions/search.json', {query: words}, function (json) {
 									Sugar.log('New discussion: Loaded ' + json.discussions.length + ' of ' + json.total_entries + ' search results for "' + query + '"');
 									$(searchResults).removeClass('loading');
 									if (json.discussions.length > 0) {

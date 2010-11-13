@@ -78,6 +78,10 @@ class Exchange < ActiveRecord::Base
   #   set_property :field_weights => {:title => 2}
   # end
 
+  # define_index do
+  #   indexes title
+  # end
+
 	class << self
 
 		# Sets the state of work safe URLs
@@ -115,11 +119,16 @@ class Exchange < ActiveRecord::Base
 				:match_mode => :extended2
 			}
 			search_options[:conditions] = {:trusted => false} unless options[:trusted]
-			exchanges = Discussion.search(options[:query], search_options)
+      # exchanges = Discussion.search(options[:query], search_options)
+			# TODO use the search_options for sort and order
+			p options[:query]
+      # *options[:query].split
+			exchanges = Discussion.search(options[:query])
+			p exchanges
 			Pagination.apply(
 				exchanges, 
 				Pagination::Paginater.new(
-					:total_count => exchanges.total_entries, 
+					:total_count => exchanges.count,
 					:page        => page, 
 					:per_page    => DISCUSSIONS_PER_PAGE
 				)

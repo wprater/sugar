@@ -93,7 +93,7 @@ class DiscussionsController < ApplicationController
 				format.json do
 					json = {
 						:pages         => @discussions.pages,
-						:total_entries => @discussions.total_entries,
+						:total_entries => @discussions.length,
 						# TODO: Fix when Rails bug is fixed
 						#:discussions   => @discussions
 						:discussions   => @discussions.map{|d| {:discussion => d.attributes}}
