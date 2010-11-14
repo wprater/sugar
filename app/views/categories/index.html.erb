@@ -12,20 +12,21 @@
 <h2 class="section"><%= link_to "Categories", categories_path %></h2>
 
 <% if @categories && @categories.length > 0 %><div id="categories">
-	<% @categories.each do |category| %>
-		<div class="category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
-			<h3 class="name">
-				<% if category.labels? %><span class="labels">[<%= category.labels.join(', ') %>]</span><% end %>
-				<%= link_to category.name, category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
-			</h3>
-			<p class="description">
-				<%= category.description %>
-				<% if @current_user && @current_user.moderator? %>
-					<%= link_to "[edit]", edit_category_path(category) %>
-				<% end %>
-			</p>
-		</div>
-	<% end %>
+  <% @categories.each do |category| %>
+    <% next unless category.root? %>
+    <div class="parent category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
+      <%= render :partial => 'category_item', :locals => {:category => category} %>
+      <% unless category.leaf? %>
+        <div class="category-children">
+          <% category.children.each do |sub_category| %>
+            <div class="child category category<%= sub_category.id %> <%= "trusted_category" if sub_category.trusted? %>">
+              <%= render :partial => 'category_item', :locals => {:category => sub_category} %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div><% else %>
-	<p>No categories have been made yet.</p>
+  <p>No categories have been made yet.</p>
 <% end %>

@@ -13,7 +13,9 @@ class Category < ActiveRecord::Base
 
 	has_many :discussions
 	validates_presence_of :name
-
+	acts_as_tree :order => :name
+  acts_as_list :scope => :parent_id
+  
 	# Flag for trusted status, which will update after save if it has been changed.
 	attr_accessor :update_trusted
 
