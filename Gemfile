@@ -32,12 +32,16 @@ gem 'rails', '3.0.0'
 
 
 gem 'pg'
+gem 'mongoid', '2.0.0.beta.20', :git => 'git://github.com/mongoid/mongoid.git'
 
 gem 'will_paginate'
 gem 'thinkingtank', :require => 'thinkingtank/init'
 gem 'json'
 gem 'acts_as_tree', :git => 'git://github.com/parasew/acts_as_tree.git'
-gem 'carrierwave'
+
+gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
+gem 'fog'
+gem 'rmagick'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
