@@ -1,12 +1,25 @@
 <% 
 	add_body_class "category", "discussions", "category#{@category.id}"
-	@page_title = @category.name 
+  if @category.root?
+    @page_title = @category.name
+  else
+    @page_title = "#{@category.parent.name} - #{@category.name}"
+  end
 %>
 
 <%= content_for :sidebar do %>
 	<%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
-<h2 class="section"><%= link_to @category.name, category_path(@category) %></h2>
+<h2 class="section">
+  <%= link_to 'Discussions', discussions_path %> &raquo; 
+  <% if @category.root? %>
+    <%= link_to @category.name, category_path(@category) %>
+  <% else %>
+    <%= link_to @category.parent.name, category_path(@category.parent) %>
+    &raquo;
+    <%= link_to @category.name, category_path(@category) %>
+  <% end %>
+</h2>
 
 <%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>

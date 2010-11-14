@@ -44,6 +44,7 @@ GEM
     arel (1.0.1)
       activesupport (~> 3.0.0)
     builder (2.1.2)
+    carrierwave (0.4.10)
     daemon-spawn (0.2.0)
     daemons (1.1.0)
     delayed_job (2.0.3)
@@ -106,6 +107,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_tree!
+  carrierwave
   daemon-spawn (= 0.2.0)
   delayed_job (= 2.0.3)
   factory_girl_rails

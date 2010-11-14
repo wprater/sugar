@@ -37,6 +37,7 @@ gem 'will_paginate'
 gem 'thinkingtank', :require => 'thinkingtank/init'
 gem 'json'
 gem 'acts_as_tree', :git => 'git://github.com/parasew/acts_as_tree.git'
+gem 'carrierwave'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'

@@ -7,5 +7,9 @@
 	<%= form.text_area(:description, :rows => 4, :cols => 80) %>
 </p>
 <p>
+  <%# form.collection_select :parent_id, Category.all.map {|c| c if c.root? }, :id, :name, :prompt => true %>
+  <%= form.collection_select :parent_id, Category.all, :id, :name, :prompt => true %>
+</p>
+<p>
 	<%= form.check_box :trusted %> Only trusted people can view this category
 </p>
