@@ -15,7 +15,7 @@ class UploadsController < ApplicationController
       :uploaded_by => @current_user.id,
       :is_temp => true
     })
-    
+    # Use the correct Carrierwave mount based on asset type
     if 'image' == media_type
       asset.image = params[:file] if 'image' == media_type
 
