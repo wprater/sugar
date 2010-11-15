@@ -21,6 +21,9 @@ class Exchange < ActiveRecord::Base
 
 	# Virtual attribute for the body of the first post
 	attr_accessor :body
+	
+	# Store the asset ids from the file uploads
+	attr_accessor :tmp_asset_ids
 
 	# Skips validation of @body if true 
 	attr_accessor :skip_body_validation
@@ -55,17 +58,21 @@ class Exchange < ActiveRecord::Base
 	after_update do |exchange|
 		# Update the first post if @body has been changed
 		if exchange.body && !exchange.body.empty? && exchange.body != exchange.posts.first.body
-			exchange.posts.first.update_attributes(:body => exchange.body, :edited_at => Time.now)
+			post = exchange.posts.first.update_attributes(:body => exchange.body, :edited_at => Time.now)
+      # Update assets
+      post.update_assets(tmp_asset_ids)
 		end
 	end
 
 	# Automatically create the first post
 	after_create do |exchange|
 		if exchange.body && !exchange.body.empty?
-			exchange.posts.create(:user => exchange.poster, :body => exchange.body)
+			post = exchange.posts.create(:user => exchange.poster, :body => exchange.body)
+      # Update assets
+      post.update_assets(tmp_asset_ids)
 		end
 	end
-
+	
   # define_index do
   #   indexes title
   #   has     type

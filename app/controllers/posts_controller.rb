@@ -90,7 +90,9 @@ class PostsController < ApplicationController
 
 		def create
 			if @discussion.postable_by?(@current_user)
-				@post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
+				@post = @discussion.posts.create(:user => @current_user, 
+				                                  :body => params[:post][:body], 
+				                                  :tmp_asset_ids => params[:post][:tmp_asset_ids])
 				if @post.valid?
 					@discussion.reload
 					@discussion.fix_counter_cache!

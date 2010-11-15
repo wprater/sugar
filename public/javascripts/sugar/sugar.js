@@ -153,10 +153,10 @@ var Sugar = {
 		richText : function () {
 			jQuery('textarea.rich').each(function () {
 				if (!this.toolbar) {
-					var ta = new JRichTextArea(this);
+					Sugar.ta = new JRichTextArea(this);
 
 					// Setup the buttons
-					ta.toolbar
+					Sugar.ta.toolbar
 						// Bold
 						.addButton("Bold", function () { 
 							this.textArea.wrapSelection('<strong>', '</strong>'); 
@@ -202,15 +202,15 @@ var Sugar = {
 							this.textArea.wrapSelection('<blockquote>', '</blockquote>');
 						})
 						// Escape HTML
-						.addButton("Escape HTML", function () {
-						    var selection = this.textArea.selectedText();
-							var response = prompt('Enter language (leave blank for no syntax highlighting)', '');
-							if (response) {
-								this.textArea.replaceSelection('<code language="' + response + '">' + selection + '</code>');
-							} else {
-							    this.textArea.replaceSelection('<code>' + selection + '</code>');
-							}
-						})
+                        // .addButton("Escape HTML", function () {
+                        //     var selection = this.textArea.selectedText();
+                        //  var response = prompt('Enter language (leave blank for no syntax highlighting)', '');
+                        //  if (response) {
+                        //      this.textArea.replaceSelection('<code language="' + response + '">' + selection + '</code>');
+                        //  } else {
+                        //      this.textArea.replaceSelection('<code>' + selection + '</code>');
+                        //  }
+                        // })
 						//
 						.addButton("Spoiler", function () { 
 							this.textArea.wrapSelection('<div class="spoiler">', '</div>'); 

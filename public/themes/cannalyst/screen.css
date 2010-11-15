@@ -307,7 +307,8 @@ span.example {
 	border:              1px solid #fff;
 	border-right-color:  #d7d7d7;
 } 
-.richTextToolbar li a:hover {
+.richTextToolbar li a:hover,
+.richTextToolbar li:hover a {
 	border-color:        #900;
 } 
 .richTextToolbar li span {
@@ -326,6 +327,7 @@ span.example {
 .richTextToolbar .EscapeHTMLButton    { background-position: 0 -306px; }
 .richTextToolbar .MP3Button           { background-position: 0 -323px; }
 .richTextToolbar .SpoilerButton       { background-position: 0 -340px; } 
+.richTextToolbar .ImageUploadButton   { background-position: 0 -357px; } 
 
 
 
@@ -682,6 +684,21 @@ table.discussions tr.targeted.nsfw {
 /* -----------------------------------------------------------------------
    POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
+#filelist {
+	padding: 10px;
+	background: #f6f6f6;
+	width: 580px;
+}
+#pick-file {
+	cursor: pointer;
+}
+#upload-files-cont {
+	margin-top: 5px;
+}
+#uploadfiles {
+	display: block;
+	margin-top: 15px;
+}
 
 .posts {
 	border-top:          1px solid #E2DCBF;

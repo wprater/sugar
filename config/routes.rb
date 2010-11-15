@@ -108,6 +108,10 @@ Sugar::Application.routes.draw do
 	match '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
 	match '/conversations' => 'discussions#conversations', :as => :conversations
 
+  # File uploads
+  resource :uploads
+  match '/discussions/file_upload' => 'uploads#create', :type => 'discussion'
+  match '/conversations/file_upload' => 'uploads#create', :type => 'conversation'
 
 	# Invites
 	resources :invites do
