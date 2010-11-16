@@ -8,6 +8,7 @@ class PostAsset
   field :name
   field :is_temp, :type => Boolean
   field :mime_type
+  field :file_size
   field :uploaded_by, :type => Integer
   field :post_id, :type => Integer
 

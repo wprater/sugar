@@ -1,5 +1,14 @@
 class UploadsController < ApplicationController
 
+  def help
+    Helper.instance
+  end
+
+  class Helper
+    include Singleton
+    include ActionView::Helpers::NumberHelper
+  end
+
 	requires_authentication
 	requires_user
 	
@@ -10,10 +19,11 @@ class UploadsController < ApplicationController
     
     # Determine if we're dealing with images or other assets
     asset = PostAsset.new({
-      :name => params[:name],
-      :mime_type => mime_type,
-      :uploaded_by => @current_user.id,
-      :is_temp => true
+      :name         => params[:name],
+      :mime_type    => mime_type,
+      :file_size    => help.number_to_human_size(File.size(params[:file])),
+      :uploaded_by  => @current_user.id,
+      :is_temp      => true
     })
     # Use the correct Carrierwave mount based on asset type
     if 'image' == media_type
