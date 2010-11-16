@@ -46,13 +46,13 @@ class DiscussionRelationship < ActiveRecord::Base
 			find_options = {}
 
 			if paginate
-	            limit     = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
+        limit     = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
 				discussions_count = self.count(:all, :conditions => find_conditions)
-	            num_pages = (discussions_count.to_f/limit).ceil
-	            page      = (options[:page] || 1).to_i
-	            page      = 1 if page < 1
-	            page      = num_pages if page > num_pages
-	            offset    = limit * (page - 1)
+        num_pages = (discussions_count.to_f/limit).ceil
+        page      = (options[:page] || 1).to_i
+        page      = 1 if page < 1
+        page      = num_pages if page > num_pages
+        offset    = limit * (page - 1)
 				offset    = 0 if offset < 0
 	
 				find_options = {
