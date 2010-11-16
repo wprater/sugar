@@ -2,7 +2,9 @@
     
     // Remove unwanted buttons from the RichTextArea Toolbar
     $($S).bind('ready', function () {
-        $('ul.' + Sugar.ta.toolbar.settings.className + ' .EscapeHTMLButton').parent('li').remove();
+        if ($(Sugar.ta).length > 0) {
+            $('ul.' + Sugar.ta.toolbar.settings.className + ' .EscapeHTMLButton').parent('li').remove();
+        }
     });
     
 })(Sugar);
