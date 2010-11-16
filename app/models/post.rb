@@ -52,6 +52,10 @@ class Post < ActiveRecord::Base
     # set_property :delta => :delayed
   end
   
+  def assets?
+    !self.assets.empty?
+  end
+  
   def assets
     # TODO get PostImage too?
     PostAsset.all(:conditions => { :post_id => self.id })
