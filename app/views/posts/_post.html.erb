@@ -76,7 +76,7 @@
       		  <% post.assets.each do |asset| %>
       		    <% mime_type = MIME::Types[asset.mime_type].first %>
       		    <p><img class="mime-type <%= mime_type.media_type %> <%= mime_type.sub_type %>" src="/images/empty.gif">
-      		      <a href="<%= asset.file.url %>"><%= asset.name %></a> (<%= asset.file_size %>)</p>
+      		      <a href="<%= asset.file.url %>"><%= asset.name %></a> <%= "(#{asset.file_size})" if asset.file_size? %></p>
       		  <% end %>
     		  </div>
     		<% end %>

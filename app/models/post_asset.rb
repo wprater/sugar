@@ -22,4 +22,8 @@ class PostAsset
   def user
     User.find(self.uploaded_by)
   end
+  
+  def file_size?
+    !self.file_size.nil?
+  end
 end
