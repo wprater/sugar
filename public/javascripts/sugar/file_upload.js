@@ -78,7 +78,7 @@
         onUploadStateChanged: function(up) {
             // If we're waiting to submit the form until all the files are done uploading
             if (this.submitAfterUpload && this.uploadsFinished()) {
-                evt.target.submit();
+                this.exchangeForm.submit();
             }
         },
         
