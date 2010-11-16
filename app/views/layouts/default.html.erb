@@ -22,7 +22,8 @@
 			scripts += %w{swfobject soundmanager2}.map{|s| "vendor/#{s}"}
 			scripts += %w{plupload.full.min}.map{|s| "vendor/plupload/#{s}"}
       # scripts += %w{sugar maps mp3player posts hotkeys facebook file_upload}.map{|s| "sugar/#{s}"}
-			scripts += %w{sugar maps mp3player posts facebook file_upload}.map{|s| "sugar/#{s}"}
+			scripts += %w{sugar maps mp3player posts facebook}.map{|s| "sugar/#{s}"}
+			scripts += %w{file_upload rich_toolbar}.map{|s| "thecannalyst/#{s}"}
 			scripts += %w{application}
 			scripts.map{|s| javascript_include_tag(s)}.join("\n").html_safe
 		%>
