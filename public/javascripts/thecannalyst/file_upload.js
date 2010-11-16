@@ -79,6 +79,7 @@
             // If we're waiting to submit the form until all the files are done uploading
             if (this.submitAfterUpload && this.uploadsFinished()) {
                 this.exchangeForm.submit();
+                this.hideUploadingSpinner();
             }
         },
         
@@ -128,6 +129,8 @@
                 "</div>"
             );
             up.refresh(); // Reposition Flash/Silverlight
+
+            this.hideUploadingSpinner();
         },
         
         onFormSubmit: function(evt) {
@@ -140,6 +143,8 @@
             } 
             // If there are files that have not been uploaded then upload and attach
             else if (this.uploader.files.length > 0) {
+                this.showUploadingSpinner();
+
                 // handler will submit the form once the files have finished
                 this.uploader.start();
                 this.submitAfterUpload = true;
@@ -169,6 +174,20 @@
         
         uploadsFinished: function() {
             return this.uploader.total.uploaded == this.uploader.files.length;
+        },
+        
+        showUploadingSpinner: function() {
+            this.statusField = $('#button-container');
+            this.oldPostButton = this.statusField.html();
+            this.statusField.addClass('posting');
+            this.statusField.html('Uploading files..');
+        },
+        
+        hideUploadingSpinner: function() {
+            this.statusField.each(function () {
+                $(this).removeClass('posting');
+                $(this).html(this.oldPostButton);
+            });
         }
     };
     
