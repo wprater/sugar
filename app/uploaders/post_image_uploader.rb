@@ -15,7 +15,11 @@ class PostImageUploader < CarrierWave::Uploader::Base
   def store_dir
     "forums/"
   end
-
+  
+  def cache_dir
+    Rails.root.join('tmp/uploads/')
+  end
+  
   # Process files as they are uploaded; we dont save original image
   # they should not be larger than
   process :watermark

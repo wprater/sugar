@@ -16,6 +16,10 @@ class PostAssetUploader < CarrierWave::Uploader::Base
     "forums/"
   end
 
+  def cache_dir
+    Rails.root.join('tmp/uploads/')
+  end
+
   # Override the filename of the uploaded files:
   def filename
     "#{self.model.id}_#{original_filename}" if original_filename
