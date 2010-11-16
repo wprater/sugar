@@ -1,4 +1,7 @@
-/* @override http://0.0.0.0:3000/themes/cannalyst/screen.css?1289583085 */
+/* @override 
+	http://0.0.0.0:3000/themes/cannalyst/screen.css?1289583085
+	http://0.0.0.0:3000/themes/cannalyst/screen.css?1289809209
+*/
 
 /* -----------------------------------------------------------------------
    RESET STYLES
@@ -685,9 +688,13 @@ table.discussions tr.targeted.nsfw {
    POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
 #filelist {
-	padding: 10px;
+	padding: 5px 10px;
 	background: #f6f6f6;
-	width: 580px;
+	border: 1px solid #d7d7d7;
+	background-color: #F6F6F6;
+	margin: 0;
+	margin-bottom: 2px;
+	max-width: 580px;
 }
 #pick-file {
 	cursor: pointer;
