@@ -17,6 +17,7 @@
             this.exchangeForm = $('form.new_discussion, form.edit_discussion, form.livePost').eq(0);
             this.uploadContainerName = 'image-upload-wrap';
             this.objectName = $('form').find('input[name=object_name]')[0].value;
+            this.submitAfterUpload = false;
             
             this.setupInterface();
             this.initUploader();
@@ -28,12 +29,16 @@
         },
         
         setupEvents: function() {
-            this.uploader.bind('Init', this.onUploaderInit.bind(this));
-            this.uploader.bind('FilesAdded', this.onFilesAdded.bind(this));
-            this.uploader.bind('UploadProgress', this.onUploadProgress.bind(this));
-            this.uploader.bind('Error', this.onUploadError.bind(this));
-            this.uploader.bind('FileUploaded', this.onFileUploaded.bind(this));
-            $('#uploadfiles').click(this.onUploadFilesClick.bind(this));
+            // Uploader events
+            this.uploader.bind('Init',          $.proxy(this.onUploaderInit, this));
+            this.uploader.bind('FilesAdded',    $.proxy(this.onFilesAdded, this));
+            this.uploader.bind('UploadProgress',$.proxy(this.onUploadProgress, this));
+            this.uploader.bind('Error',         $.proxy(this.onUploadError, this));
+            this.uploader.bind('FileUploaded',  $.proxy(this.onFileUploaded, this));
+            this.uploader.bind('StateChanged',  $.proxy(this.onUploadStateChanged, this));
+
+            $('#uploadfiles').click($.proxy(this.onUploadFilesClick, this));
+            this.exchangeForm.submit($.proxy(this.onFormSubmit, this));
         },
         
         setupInterface: function() {
@@ -56,18 +61,25 @@
                     {title : "Image files", extensions : "jpeg,jpg,gif,png"},
                     {title : "Pdf files", extensions : "pdf"},
                     // TODO virus scanning
-                    {title : "Other files", extensions : "doc,txt,docx"},
+                    {title : "Other files", extensions : "doc,txt,docx,xls"},
                     {title : "Zip files", extensions : "zip"}
                 ],
                 multipart: true,
                 multipart_params: {
-                    authenticity_token: Sugar.authToken(this.exchangeForm)
+                    "authenticity_token": Sugar.authToken(this.exchangeForm)
                 }
             });
         },
         
         onUploaderInit: function(up, params) {
             // $('#filelist').html("<div>Current runtime: " + params.runtime + "</div>");
+        },
+        
+        onUploadStateChanged: function(up) {
+            // If we're waiting to submit the form until all the files are done uploading
+            if (this.submitAfterUpload && this.uploadsFinished()) {
+                evt.target.submit();
+            }
         },
         
         onUploadFilesClick: function(e) {
@@ -89,6 +101,7 @@
         
         onUploadProgress: function(up, file) {
             $('#' + file.id + " b").html(file.percent + "%");
+
         },
         
         onFileUploaded: function(up, file, res) {
@@ -109,12 +122,28 @@
         },
         
         onUploadError: function(up, err) {
-            $('#filelist').append("<div>Error: " + err.code +
+            $('#filelist').prepend("<div>Error: " + err.code +
                 ", Message: " + err.message +
                 (err.file ? ", File: " + err.file.name : "") +
                 "</div>"
             );
             up.refresh(); // Reposition Flash/Silverlight
+        },
+        
+        onFormSubmit: function(evt) {
+            evt.preventDefault();
+            
+            // If there are not files or they have already been uploaded then submit
+            if (this.uploader.files.length == 0 || this.uploadsFinished()) { 
+                evt.target.submit();
+                return;
+            } 
+            // If there are files that have not been uploaded then upload and attach
+            else if (this.uploader.files.length > 0) {
+                // handler will submit the form once the files have finished
+                this.uploader.start();
+                this.submitAfterUpload = true;
+            }
         },
         
         addUploadBar: function() {
@@ -136,6 +165,10 @@
             // var button = $(Sugar.ta.toolbar.buttons).last().eq(0);
             // button.find('a').wrap('<div title="' + buttonName + '" id="'+ this.uploadContainerName +'">');
             // this.browseButtonName = button.find('a').attr('id');
+        },
+        
+        uploadsFinished: function() {
+            return this.uploader.total.uploaded == this.uploader.files.length;
         }
     };
     
