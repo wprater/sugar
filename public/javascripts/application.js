@@ -95,8 +95,7 @@ function JRichTextArea(textArea, options) {
 		addButton: function (name, callback, options) {
 			// Default options
 			settings = jQuery.extend({
-				className: name.replace(/[\s]+/, '') + "Button",
-				idName: name.replace(/[\s]+/, '') + "Button"
+				className: name.replace(/[\s]+/, '') + "Button"
 			}, options);
 			var li = document.createElement("li");
 			var a = document.createElement("a");
@@ -104,7 +103,7 @@ function JRichTextArea(textArea, options) {
 			a.textArea = this.textArea;
 			//callback.this = this;
 			jQuery(a).click(callback);
-			jQuery(a).addClass(settings.className).attr('id', settings.idName);
+			jQuery(a).addClass(settings.className);
 			jQuery(li).append(a).appendTo(this.listElement);
 			this.buttons.push(li);
 			return this;
