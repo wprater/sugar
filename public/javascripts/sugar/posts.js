@@ -257,10 +257,7 @@ $.extend(Sugar, {
 				$.ajax({
 					url:  submitForm.action,
 					type: 'POST',
-					data: {
-						'post[body]': postBody,
-						authenticity_token: Sugar.authToken(this)
-					},
+					data:  $(submitForm).serialize(),
 					success: function () {
 						$('#compose-body').val('');
 						$('.posts #previewPost').hide();

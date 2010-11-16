@@ -1,0 +1,5 @@
+development:
+  uri: 'mongodb://localhost/cannalyst_forum'
+
+production:
+  uri: <%= ENV['MONGOHQ_URL'] %>

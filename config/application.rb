@@ -40,6 +40,16 @@ module Sugar
 		config.filter_parameters += [:password, :drawing]
 		
     # require 'thinkingtank/init'
+    
+    require 'lib/config_store'
+    config_store = ConfigStore.new("#{ENV['HOME']}/Development/.s3") unless 'production' == ENV['RACK_ENV']
+    CarrierWave.configure do |config|
+      config.s3_access_key_id     = ENV['S3_KEY'] || config_store['s3_access_key_id']
+      config.s3_secret_access_key = ENV['S3_SECRET'] || config_store['s3_secret_access_key']
+      config.s3_bucket            = ENV['S3_BUCKET'] || 'thecannalyst'
+      config.s3_headers           = { 'Expires' => "#{(Time.now + 60*60*24*365).httpdate}" }
+    end
+    
 	end
 end
 

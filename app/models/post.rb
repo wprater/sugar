@@ -10,6 +10,9 @@ class Post < ActiveRecord::Base
 
 	validates_presence_of :body, :user_id, :discussion_id
 
+	# Store the asset ids from the file uploads
+	attr_accessor :tmp_asset_ids
+
 	after_create do |post|
 		# Automatically update the discussion with last poster info
 		post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
@@ -24,6 +27,10 @@ class Post < ActiveRecord::Base
 		post.trusted      = post.discussion.trusted if post.discussion
 		post.conversation = post.discussion.kind_of?(Conversation)
 		post.body_html    = PostParser.parse(post.body) unless post.skip_html
+	end
+	
+	after_save do |post|
+    post.update_assets(post.tmp_asset_ids)
 	end
 	
   # define_index do
@@ -43,6 +50,11 @@ class Post < ActiveRecord::Base
     # has     created_at, updated_at
     # has     trusted, conversation
     # set_property :delta => :delayed
+  end
+  
+  def assets
+    # TODO get PostImage too?
+    PostAsset.all(:conditions => { :post_id => self.id })
   end
   
 	class << self
@@ -112,7 +124,15 @@ class Post < ActiveRecord::Base
 			self[:body_html].html_safe
 		end
 	end
-
+  
+  def update_assets(asset_ids)
+    return if asset_ids.nil?
+    asset_ids.each do |post_asset_id|
+      post_asset = PostAsset.find(post_asset_id)
+      post_asset.update_attributes(:is_temp => false, :post_id => self.id)
+    end
+  end
+  
 	def edited?
 		return false unless edited_at?
 		(((self.edited_at || self.created_at) - self.created_at) > 5.seconds ) ? true : false

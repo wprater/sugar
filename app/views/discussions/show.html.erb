@@ -31,9 +31,9 @@
 
   <!-- <%= link_to 'Discussions', discussions_path %> 
   &raquo;
-  <%= link_to @discussion.category.parent.name, category_path(@discussion.category.parent) %>
+  <%# link_to @discussion.category.parent.name, category_path(@discussion.category.parent) %>
   &raquo;
-  <%= link_to @discussion.category.name, category_path(@discussion.category) %>  
+  <%# link_to @discussion.category.name, category_path(@discussion.category) %>  
   &raquo; -->
   <%= link_to (@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 </h2>
@@ -61,6 +61,7 @@
 		<%# Text reply %>
 		<div id="replyText">
 			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+        <%= hidden_field_tag 'object_name', f.object_name %>
 				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
 				<p id="button-container">
 					<button type="submit">Post</button>
