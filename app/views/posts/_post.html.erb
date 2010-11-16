@@ -71,6 +71,15 @@
 				<% if post.edited? %><div class="edited">
 					Edited <%= formatted_time post.edited_at %>
 				</div><% end %>
+				<% if post.assets? %>
+    		  <div class="assets">
+      		  <% post.assets.each do |asset| %>
+      		    <% mime_type = MIME::Types[asset.mime_type].first %>
+      		    <p><img class="mime-type <%= mime_type.media_type %> <%= mime_type.sub_type %>" src="/images/empty.gif">
+      		      <a href="<%= asset.file.url %>"><%= asset.name %></a> (<%= asset.file_size %>)</p>
+      		  <% end %>
+    		  </div>
+    		<% end %>
 			</div>
 		<% end %>
 	</div>

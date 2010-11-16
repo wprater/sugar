@@ -1,6 +1,7 @@
 /* @override 
 	http://0.0.0.0:3000/themes/cannalyst/screen.css?1289583085
 	http://0.0.0.0:3000/themes/cannalyst/screen.css?1289809209
+	http://0.0.0.0:3000/themes/cannalyst/screen.css
 */
 
 /* -----------------------------------------------------------------------
@@ -800,6 +801,26 @@ table.discussions tr.targeted.nsfw {
 }
 .post .body .content {
 	font-size:           1em;
+}
+
+.post .body .assets {
+	background-color: #f6f6f6;
+	padding: 9px;
+}
+.post .body .assets img.mime-type {
+	width: 16px;
+	height: 16px;
+	margin-right: 2px;
+	background: url(images/mime_sprite.png) no-repeat 0 0;
+	vertical-align: bottom;
+}
+.post .body .assets img.mime-type.png { background-position: 0 -16px; }
+.post .body .assets img.mime-type.pdf { background-position: 0 -64px; }
+
+.post .body .assets p {
+	font-size: 0.9em;
+	margin: 0;
+	padding-bottom: 6px;
 }
 
 .me_post {
