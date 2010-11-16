@@ -17,4 +17,8 @@ class PostAsset
   def post
     Post.find(self.post_id)
   end
+  
+  def user
+    User.find(self.uploaded_by)
+  end
 end
