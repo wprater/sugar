@@ -93,6 +93,9 @@ function JRichTextArea(textArea, options) {
 		listElement: false,
 		buttons: [],
 		addButton: function (name, callback, options) {
+		    // Dont add button if it already exists
+		    if (this.hasButton(name)) { return false; }
+		    
 			// Default options
 			settings = jQuery.extend({
 				className: this.getButtonName(name)
@@ -115,7 +118,7 @@ function JRichTextArea(textArea, options) {
 			return name.replace(/[\s]+/, '') + "Button";
 		},
 		hasButton: function(name) {
-		    $(this.listElement).find('.' + this.getButtonName(name)).length > 0;
+		    return $(this.listElement).find('.' + this.getButtonName(name)).length > 0;
 		},
 		create: function () {
 			if (!this.listElement) {
