@@ -19,13 +19,14 @@ class PostImageUploader < CarrierWave::Uploader::Base
   def cache_dir
     Rails.root.join('tmp/uploads/')
   end
-  
+
+  # enable_processing = false
   # Process files as they are uploaded; we dont save original image
   # they should not be larger than
   process :watermark
   process :resize_to_limit => [2000, 2000]
   version :inline_post do
-    process :resize_to_limit => [600, 500]
+    process :resize_to_limit => [500, 400]
   end
 
   def watermark
