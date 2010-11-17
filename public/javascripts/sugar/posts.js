@@ -262,6 +262,7 @@ $.extend(Sugar, {
 						$('#compose-body').val('');
 						$('.posts #previewPost').hide();
 						Sugar.loadNewPosts();
+						$(Sugar).trigger('livepostsuccess', [submitForm]);
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						alert(textStatus);
