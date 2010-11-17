@@ -114,6 +114,9 @@ function JRichTextArea(textArea, options) {
 		getButtonName: function(name) {
 			return name.replace(/[\s]+/, '') + "Button";
 		},
+		hasButton: function(name) {
+		    $(this.listElement).find('.' + this.getButtonName(name)).length > 0;
+		},
 		create: function () {
 			if (!this.listElement) {
 				this.listElement = document.createElement("ul");
