@@ -57,7 +57,6 @@ class Post < ActiveRecord::Base
   end
   
   def assets
-    # TODO get PostImage too?
     PostAsset.all(:conditions => { :post_id => self.id })
   end
   
