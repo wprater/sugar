@@ -5,15 +5,62 @@ class PostAsset
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  def help
+    Helper.instance
+  end
+
+  class Helper
+    include Singleton
+    include ActionView::Helpers::NumberHelper
+  end
+
   field :name
   field :is_temp, :type => Boolean
   field :mime_type
   field :file_size
+  field :asset_type
   field :uploaded_by, :type => Integer
   field :post_id, :type => Integer
 
   mount_uploader :file, PostAssetUploader
   mount_uploader :image, PostImageUploader
+  
+  # Get the correct uploader
+  def asset
+    self.send(self.asset_type)
+  end
+  
+  # Set correct uploader and meta data
+  def asset=(new_asset)
+    self.mime_type = MIME::Types.of(new_asset.original_filename).first
+    media_type     = self.mime_type.media_type
+    sub_type       = self.mime_type.sub_type
+    
+    # Use the correct Carrierwave mount based on asset type
+    if 'image' == media_type
+      self.asset_type = 'image'
+      self.image = new_asset if 'image' == media_type
+      # Make sure to get the size of the processed image, we don't keep the original
+      self.file_size = File.size?(self.image.path)
+    else
+      self.asset_type = 'file'
+      self.file = new_asset if
+        # Search the media types 
+        %w{
+          application
+          text
+          video
+        }.include?(media_type) || \
+        # Support doc, pdf, and/or application types
+        %w{
+          vnd.ms-excel
+          vnd.ms-word
+          pdf
+        }.include?(sub_type)
+        
+      self.file_size = File.size?(self.file.path)
+    end
+  end
   
   def post
     Post.find(self.post_id)
@@ -31,7 +78,11 @@ class PostAsset
     !self.file_size.nil?
   end
   
+  def file_size
+    help.number_to_human_size(self.read_attribute(:file_size))
+  end
+  
   def url
-    self.image.url || self.file.url
+    self.asset.url
   end
 end
