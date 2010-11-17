@@ -688,7 +688,10 @@ table.discussions tr.targeted.nsfw {
 /* -----------------------------------------------------------------------
    POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
-#filelist {
+
+/* @group Asset Upload Plugin */
+
+.upload-files-cont {
 	padding: 5px 10px;
 	background: #f6f6f6;
 	border: 1px solid #d7d7d7;
@@ -697,16 +700,20 @@ table.discussions tr.targeted.nsfw {
 	margin-bottom: 2px;
 	max-width: 580px;
 }
-#pick-file {
-	cursor: pointer;
-}
-#upload-files-cont {
+.upload-files-cont .filelist {
 	margin-top: 5px;
 }
-#uploadfiles {
+/*#pick-file {
+	cursor: pointer;
+}*/
+.upload-files-cont .uploadfiles {
 	display: block;
 	margin-top: 15px;
 }
+
+
+/* @end */
+
 
 .posts {
 	border-top:          1px solid #E2DCBF;
