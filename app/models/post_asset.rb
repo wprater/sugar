@@ -23,7 +23,15 @@ class PostAsset
     User.find(self.uploaded_by)
   end
   
+  def mime_type
+    MIME::Types[self.read_attribute(:mime_type)].first
+  end
+  
   def file_size?
     !self.file_size.nil?
+  end
+  
+  def url
+    self.image.url || self.file.url
   end
 end
