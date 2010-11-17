@@ -3,6 +3,7 @@
 
 (function ($S) {
     
+    // Evey time an RichText widget is built, we attach ourselves to it
     $($S).bind('richtextinit', function(evt, tb) {
         if (!$.isFunction(tb.fileUpload)) {
             tb.fileUpload = new $S.FileUpload(tb);
