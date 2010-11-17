@@ -214,6 +214,8 @@ var Sugar = {
 						.addButton("Spoiler", function () { 
 							this.textArea.wrapSelection('<div class="spoiler">', '</div>'); 
 						});
+					
+					$(Sugar).trigger('richtextinit')
 				}
 			});
 		},
