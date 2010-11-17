@@ -44,6 +44,7 @@ class UploadsController < ApplicationController
       || # Search the media types 
       %w{
         text
+        video
       }.include?(media_type)
 
       out_method = :file
