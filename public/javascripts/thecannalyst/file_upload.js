@@ -18,7 +18,7 @@
     };
     
     $S.FileUpload.prototype.init = function() {
-        this.exchangeForm   = $(this.tb.textArea).closest('form')
+        this.exchangeForm   = $(this.tb.textArea).closest('form');
         this.objectName     = this.exchangeForm.find('input[name=object_name]')[0].value;
         this.postId         = this.exchangeForm.find('input[name=post_id]').first().val();
         this.submitAfterUpload = false;
@@ -44,7 +44,7 @@
         this.uploader.bind('FileUploaded',  $.proxy(this.onFileUploaded, this));
         this.uploader.bind('StateChanged',  $.proxy(this.onUploadStateChanged, this));
 
-        this.exchangeForm.submit($.proxy(this.onFormSubmit, this));
+        this.exchangeForm.bind('submit', $.proxy(this.onFormSubmit, this));
     };
     
     $S.FileUpload.prototype.setupInterface = function() {
@@ -57,13 +57,14 @@
             runtimes : 'html5,flash,silverlight,browserplus',
             browse_button : this.filePickId,
             container : this.uploadContainerId,
-            max_file_size : '10mb',
+            max_file_size : '70mb',
             url : this.exchangeForm.attr('action') + '/file_upload',
             flash_swf_url : '/javascripts/vendor/plupload/plupload.flash.swf',
             silverlight_xap_url : '/javascripts/vendor/plupload/plupload.silverlight.xap',
             filters : [
                 {title : "Image files", extensions : "jpeg,jpg,gif,png"},
                 {title : "Pdf files", extensions : "pdf"},
+                {title : "Video files", extensions : "mov,m4v,avi,mp4"},
                 // TODO virus scanning
                 {title : "Other files", extensions : "doc,txt,docx,xls"},
                 {title : "Zip files", extensions : "zip"}
@@ -82,11 +83,6 @@
     };
     
     $S.FileUpload.prototype.onUploadStateChanged = function(up) {
-        // If we're waiting to submit the form until all the files are done uploading
-        if (this.submitAfterUpload && this.uploadsFinished()) {
-            this.exchangeForm.submit();
-            this.hideUploadingSpinner();
-        }
     };
     
     $S.FileUpload.prototype.onUploadFilesClick = function(e) {
@@ -108,7 +104,6 @@
     
     $S.FileUpload.prototype.onUploadProgress = function(up, file) {
         $('#' + file.id + " b").html(file.percent + "%");
-
     };
     
     $S.FileUpload.prototype.onFileUploaded = function(up, file, res) {
@@ -117,12 +112,18 @@
         $('#' + file.id + " b").html("100%");
 
         // Insert hidden field with asset_id
-        this.exchangeForm.append($("<input />")
+        this.exchangeForm.prepend($("<input />")
           .attr("type","hidden")
           .addClass('post_tmp_asset_ids')
           .attr("name", this.objectName + '[tmp_asset_ids][]')
           .val(response._id)
         );
+
+        // If we're waiting to submit the form until all the files are done uploading
+        if (this.submitAfterUpload && this.uploadsFinished()) {
+            this.exchangeForm.submit();
+            this.hideUploadingSpinner();
+        }
     };
     
     $S.FileUpload.prototype.onUploadError = function(up, err) {
