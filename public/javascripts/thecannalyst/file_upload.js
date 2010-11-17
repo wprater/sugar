@@ -125,10 +125,10 @@
 
         // Insert hidden field with asset_id
         this.exchangeForm.prepend($("<input />")
-          .attr("type","hidden")
-          .addClass('post_tmp_asset_ids')
-          .attr("name", this.objectName + '[tmp_asset_ids][]')
-          .val(response._id)
+            .attr("type","hidden")
+            .addClass('post_tmp_asset_ids')
+            .attr("name", this.objectName + '[tmp_asset_ids][]')
+            .val(response._id)
         );
 
         // If we're waiting to submit the form until all the files are done uploading
