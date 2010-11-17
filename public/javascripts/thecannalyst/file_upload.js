@@ -9,6 +9,11 @@
             tb.fileUpload = new $S.FileUpload(tb);
         }
     });
+    $($S).bind('livepostsuccess', function(evt, submitForm) {
+        $(submitForm).find('textarea.rich').each(function () {
+            this.toolbar.fileUpload.resetForm();
+        });
+    });
     
     
     $S.FileUpload = function(tb) {
@@ -52,6 +57,13 @@
         this.addUploadImageToolbarButton();
     };
     
+    $S.FileUpload.prototype.resetForm = function() {
+        // Close uploaded pane and reset interface
+        $(this.tb.buttons).find('a.' + this.tb.getButtonName(this.imageUploadButtonName)).trigger('click');
+        this.resetUploadedFilesArea();
+        this.exchangeForm.find('.post_tmp_asset_ids').remove();
+    };
+    
     $S.FileUpload.prototype.initUploader = function() {
         this.uploader = new plupload.Uploader({
             runtimes : 'html5,flash,silverlight,browserplus',
@@ -92,10 +104,10 @@
     
     $S.FileUpload.prototype.onFilesAdded = function(up, files) {
         $.each(files, $.proxy(function(i, file) {
-            this.uploadContainer.find('.filelist').prepend(
-                '<div id="' + file.id + '">' +
-                file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' +
-            '</div>');
+            this.uploadContainer.find('.filelist').prepend($('<div>')
+                .addClass('file').attr('id', file.id)
+                .html(file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>')
+            );
         }, this));
         up.refresh(); // Reposition Flash/Silverlight
         
@@ -121,7 +133,13 @@
 
         // If we're waiting to submit the form until all the files are done uploading
         if (this.submitAfterUpload && this.uploadsFinished()) {
-            this.exchangeForm.submit();
+            if ($("#replyText form").length > 0) {
+                Sugar.parseSubmit();
+            } else {
+                // Kill the hanlder, as we just want to process a normal submit
+                this.exchangeForm.unbind('submit');
+                this.exchangeForm.submit();
+            }
             this.hideUploadingSpinner();
         }
     };
@@ -139,19 +157,22 @@
     
     $S.FileUpload.prototype.onFormSubmit = function(evt) {
         evt.preventDefault();
+        evt.stopImmediatePropagation();
         
-        // If there are not files or they have already been uploaded then submit
-        if (this.uploader.files.length == 0 || this.uploadsFinished()) { 
-            evt.target.submit();
-            return;
-        } 
         // If there are files that have not been uploaded then upload and attach
-        else if (this.uploader.files.length > 0) {
+        if (this.uploader.files.length > 0 && !this.uploadsFinished()) {
             this.showUploadingSpinner();
 
             // handler will submit the form once the files have finished
             this.uploader.start();
             this.submitAfterUpload = true;
+        } else {
+            // If we have inline livePost then use Sugar post parsing and Ajax\n
+            if ($("#replyText form").length > 0) {
+                Sugar.parseSubmit();
+            } else {
+                $(evt.target).submit();
+            }
         }
     };
     
@@ -165,6 +186,11 @@
 
         this.uploadContainer.find('.uploadfiles').hide()
             .click($.proxy(this.onUploadFilesClick, this));
+    };
+
+    $S.FileUpload.prototype.resetUploadedFilesArea = function(tb) {
+        this.uploadContainer.find('.filelist .file').remove();
+        this.uploadContainer.find('.uploadfiles').hide();
     };
     
     $S.FileUpload.prototype.addUploadImageToolbarButton = function() {
