@@ -7,17 +7,28 @@ class PostImageUploader < CarrierWave::Uploader::Base
   # include CarrierWave::ImageScience
 
   # Choose what kind of storage to use for this uploader:
-  # storage :file
-  storage :s3
+  if 'production' == ENV['RACK_ENV']
+    storage :s3
+  else
+    storage :file
+  end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "forums/"
+    if 'production' == ENV['RACK_ENV']
+      "forums/"
+    else
+      'public/forums/'
+    end
   end
   
   def cache_dir
     Rails.root.join('tmp/uploads/')
+  end
+
+  def root
+    Rails.root
   end
 
   # enable_processing = false
