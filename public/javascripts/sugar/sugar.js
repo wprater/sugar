@@ -153,10 +153,10 @@ var Sugar = {
 		richText : function () {
 			jQuery('textarea.rich').each(function () {
 				if (!this.toolbar) {
-					Sugar.ta = new JRichTextArea(this);
+					Sugar.richTextArea = new JRichTextArea(this);
 
 					// Setup the buttons
-					Sugar.ta.toolbar
+					Sugar.richTextArea.toolbar
 						// Bold
 						.addButton("Bold", function () { 
 							this.textArea.wrapSelection('<strong>', '</strong>'); 
