@@ -110,8 +110,8 @@ Sugar::Application.routes.draw do
 
   # File uploads
   resource :uploads
-  match '/discussions/file_upload' => 'uploads#create', :type => 'discussion'
-  match '/conversations/file_upload' => 'uploads#create', :type => 'conversation'
+  match '/discussions(/*tmp_path)/file_upload' => 'uploads#create', :type => 'discussion'
+  match '/conversations(/*tmp_path)/file_upload' => 'uploads#create', :type => 'conversation'
 
 	# Invites
 	resources :invites do
