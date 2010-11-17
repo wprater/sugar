@@ -9,6 +9,7 @@
             tb.fileUpload = new $S.FileUpload(tb);
         }
     });
+    // Listen for live posts and reset form 
     $($S).bind('livepostsuccess', function(evt, submitForm) {
         $(submitForm).find('textarea.rich').each(function () {
             this.toolbar.fileUpload.resetForm();
