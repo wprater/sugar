@@ -184,12 +184,12 @@
             this.uploader.start();
             this.submitAfterUpload = true;
         } else {
-            this.exchangeFormSubmit();
+            this.exchangeFormSubmit($(evt.target));
         }
     };
     
-    $S.FileUpload.prototype.exchangeFormSubmit = function() {
-        if ($("#replyText form").length > 0) {
+    $S.FileUpload.prototype.exchangeFormSubmit = function(form) {
+        if (form.hasClass('livePost')) {
             Sugar.parseSubmit();
         } else {
             // Kill the hanlder, as we just want to process a normal submit
