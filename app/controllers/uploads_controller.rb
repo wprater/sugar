@@ -17,7 +17,8 @@ class UploadsController < ApplicationController
     end
     asset.asset = params[:file]
     asset.save
-
-    render :json => asset, :methods => [:url, :inline_post_url]
+    
+    methods = [:url, :inline_post_url] if asset.is_image?
+    render :json => asset, :methods => methods
   end
 end
