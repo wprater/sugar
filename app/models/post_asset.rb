@@ -76,6 +76,10 @@ class PostAsset
     MIME::Types[self.read_attribute(:mime_type)].first
   end
   
+  def is_image?
+    'image' == self.mime_type.media_type
+  end
+  
   def file_size?
     !self.file_size.nil?
   end
