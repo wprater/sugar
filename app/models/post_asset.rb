@@ -27,14 +27,16 @@ class PostAsset
   
   # Get the correct uploader
   def asset
-    self.send(self.asset_type)
+    self.send(self.asset_type || :file)
   end
   
   # Set correct uploader and meta data
   def asset=(new_asset)
-    self.mime_type = MIME::Types.of(new_asset.original_filename).first
-    media_type     = self.mime_type.media_type
-    sub_type       = self.mime_type.sub_type
+    self.mime_type = new_asset.is_a?(Tempfile) \
+                      ? MIME::Types.of(new_asset.original_filename).first \
+                      : MIME::Types.of(new_asset.path).first
+    media_type     = self.mime_type.media_type  || 'application'
+    sub_type       = self.mime_type.sub_type    || ''
     
     # Use the correct Carrierwave mount based on asset type
     if 'image' == media_type
@@ -84,5 +86,9 @@ class PostAsset
   
   def url
     self.asset.url
+  end
+  
+  def inline_post_url
+    self.asset.inline_post.url
   end
 end
