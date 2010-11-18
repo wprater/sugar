@@ -146,13 +146,7 @@
 
         // If we're waiting to submit the form until all the files are done uploading
         if (this.submitAfterUpload && this.uploadsFinished()) {
-            if ($("#replyText form").length > 0) {
-                Sugar.parseSubmit();
-            } else {
-                // Kill the hanlder, as we just want to process a normal submit
-                this.exchangeForm.unbind('submit');
-                this.exchangeForm.submit();
-            }
+            this.exchangeFormSubmit();
             this.hideUploadingSpinner();
         }
     };
@@ -180,22 +174,26 @@
             this.uploader.start();
             this.submitAfterUpload = true;
         } else {
-            // If we have inline livePost then use Sugar post parsing and Ajax\n
-            if ($("#replyText form").length > 0) {
-                Sugar.parseSubmit();
-            } else {
-                $(evt.target).submit();
-            }
+            this.exchangeFormSubmit();
         }
     };
+    
+    $S.FileUpload.prototype.exchangeFormSubmit = function() {
+        if ($("#replyText form").length > 0) {
+            Sugar.parseSubmit();
+        } else {
+            // Kill the hanlder, as we just want to process a normal submit
+            this.exchangeForm.unbind('submit');
+            this.exchangeForm.submit();
+        }
+    }
     
     $S.FileUpload.prototype.addUploadedFilesArea = function(tb) {
         var container = document.createElement('div');
         this.uploadContainer = $(container).attr('id', this.uploadContainerId).addClass('upload-files-cont')
             .insertAfter(this.tb.listElement)
             .append('<div class="filelist" />')
-            .append('<a id="' + this.filePickId + '" href="#">Attach or upload file..</a>')
-            .append('<a class="uploadfiles" ><span>Upload files</span></a>');
+            .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file..</a>');
 
         this.uploadContainer.find('.uploadfiles').hide()
             .click($.proxy(this.onUploadFilesClick, this));
@@ -228,7 +226,7 @@
         this.statusField = $('#button-container');
         this.oldPostButton = this.statusField.html();
         this.statusField.addClass('posting');
-        this.statusField.html('Uploading files..');
+        this.statusField.html('Posting..');
     };
     
     $S.FileUpload.prototype.hideUploadingSpinner = function() {
