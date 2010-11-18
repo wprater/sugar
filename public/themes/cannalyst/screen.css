@@ -710,6 +710,25 @@ table.discussions tr.targeted.nsfw {
 	display: block;
 	margin-top: 15px;
 }
+.filelist .progress,
+.filelist .progress .inner {
+	display: inline-block;
+	height: 10px;
+}
+.filelist .progress {
+	position: relative;
+	width: 100px;
+	border: 1px solid #d7d7d7;
+	margin: 0 5px;
+	margin-bottom: 2px;
+	vertical-align: bottom;
+}
+.filelist .progress .inner {
+	position: absolute;
+	display: inline-block;
+	width: 10%;
+	background: rgba(0,0,0,0.2);
+}
 
 .post .body .assets {
 	background-color: #f6f6f6;
