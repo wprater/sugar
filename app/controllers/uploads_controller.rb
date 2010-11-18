@@ -18,6 +18,6 @@ class UploadsController < ApplicationController
     asset.asset = params[:file]
     asset.save
 
-    render :json => asset
+    render :json => asset, :methods => [:url, :inline_post_url]
   end
 end
