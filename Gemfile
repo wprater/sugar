@@ -33,6 +33,7 @@ gem 'rails', '3.0.0'
 
 gem 'pg'
 gem 'mongoid', '2.0.0.beta.20', :git => 'git://github.com/mongoid/mongoid.git'
+gem 'bson_ext'
 
 gem 'will_paginate'
 gem 'thinkingtank', :require => 'thinkingtank/init'
