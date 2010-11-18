@@ -2,6 +2,15 @@
 /*global window: false, jQuery: false, $: false, Sugar: false, FB: false*/
 
 (function ($S) {
+
+    $($S).bind('ready', function(evt) {
+        // Add href around img to larger image
+        $('.body img.inline-image').each(function() {
+            $(this).wrap($('<a>')
+                .attr('href', 
+                $(this).attr('src').replace('inline_post_', '')));
+        });
+    });
     
     // Evey time an RichText widget is built, we attach ourselves to it
     $($S).bind('richtextinit', function(evt, tb) {
@@ -9,6 +18,7 @@
             tb.fileUpload = new $S.FileUpload(tb);
         }
     });
+    
     // Listen for live posts and reset form 
     $($S).bind('livepostsuccess', function(evt, submitForm) {
         $(submitForm).find('textarea.rich').each(function () {
@@ -132,7 +142,7 @@
             $('#' + file.id).append($('<a class="post-insert">').html('Insert into post'))
                 .click($.proxy(function(evt) {
                     evt.preventDefault();
-                    this.insertImageIntoTextArea(response.name, response.inline_post_url)
+                    this.insertImageIntoTextArea(response)
                 }, this));
         }
         
@@ -217,9 +227,13 @@
         return this.uploader.total.uploaded == this.uploader.files.length;
     };
 
-    $S.FileUpload.prototype.insertImageIntoTextArea = function(name, url) {
+    $S.FileUpload.prototype.insertImageIntoTextArea = function(fileInfo) {
         var selection = this.tb.textArea.selectedText();
-        this.tb.textArea.replaceSelection('<img src="' + url + '" alt="' + name + '" />');
+        this.tb.textArea.replaceSelection($('<div>').append(
+            $('<img>').attr('src', fileInfo.inline_post_url)
+                      .attr('alt', fileInfo.name)
+                      .addClass('inline-image').clone()).remove().html()
+        );
     };
     
     $S.FileUpload.prototype.showUploadingSpinner = function() {
