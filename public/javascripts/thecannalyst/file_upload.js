@@ -107,23 +107,35 @@
         $.each(files, $.proxy(function(i, file) {
             this.uploadContainer.find('.filelist').prepend($('<div>')
                 .addClass('file').attr('id', file.id)
-                .html(file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>')
+                .html(file.name + ' (' + plupload.formatSize(file.size) + ')')
+                .append('<span class="progress"><span class="inner"></span>')
             );
         }, this));
         up.refresh(); // Reposition Flash/Silverlight
+        this.uploader.start();
         
         this.uploadContainer.find(".uploadfiles").show();
     };
     
     $S.FileUpload.prototype.onUploadProgress = function(up, file) {
-        $('#' + file.id + " b").html(file.percent + "%");
+        // $('#' + file.id + " b").html(file.percent + "%");
+        $('#' + file.id + " .progress .inner").css('width', file.percent + "%");
     };
     
     $S.FileUpload.prototype.onFileUploaded = function(up, file, res) {
         var response = $.parseJSON(res.response);
         
-        $('#' + file.id + " b").html("100%");
+        // $('#' + file.id + " span").html("100%");
+        $('#' + file.id + " .progress").hide();
 
+        if ('image' === response.asset_type) {
+            $('#' + file.id).append($('<a class="post-insert">').html('Insert into post'))
+                .click($.proxy(function(evt) {
+                    evt.preventDefault();
+                    this.insertImageIntoTextArea(response.name, response.inline_post_url)
+                }, this));
+        }
+        
         // Insert hidden field with asset_id
         this.exchangeForm.prepend($("<input />")
             .attr("type","hidden")
@@ -207,6 +219,11 @@
         return this.uploader.total.uploaded == this.uploader.files.length;
     };
 
+    $S.FileUpload.prototype.insertImageIntoTextArea = function(name, url) {
+        var selection = this.tb.textArea.selectedText();
+        this.tb.textArea.replaceSelection('<img src="' + url + '" alt="' + name + '" />');
+    };
+    
     $S.FileUpload.prototype.showUploadingSpinner = function() {
         this.statusField = $('#button-container');
         this.oldPostButton = this.statusField.html();
