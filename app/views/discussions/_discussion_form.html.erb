@@ -1,5 +1,9 @@
 <%= hidden_field_tag 'object_name', f.object_name %>
 <%= f.hidden_field :type %>
+<% @discussion.tmp_asset_ids.each do |tmp_asset_id| %> 
+  <%= hidden_field_tag 'discussion[tmp_asset_ids][]', tmp_asset_id %>
+<% end unless @discussion.tmp_asset_ids.nil? %>
+
 <% if @recipient %>
 	<%= hidden_field_tag :recipient_id, @recipient.id %>
 <% end %>
