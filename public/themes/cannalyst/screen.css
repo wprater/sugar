@@ -703,11 +703,16 @@ table.discussions tr.targeted.nsfw {
 .upload-files-cont .filelist {
 	margin-top: 5px;
 }
+.upload-files-cont .filelist .file {
+	margin-bottom: 2px;
+}
+.upload-files-cont .filelist .file:last-child {
+	margin-bottom: 10px;
+}
 /*#pick-file {
 	cursor: pointer;
 }*/
 .upload-files-cont .uploadfiles {
-	display: block;
 	margin-top: 15px;
 }
 .filelist .progress,
@@ -728,6 +733,16 @@ table.discussions tr.targeted.nsfw {
 	display: inline-block;
 	width: 10%;
 	background: rgba(0,0,0,0.2);
+}
+.filelist .post-insert {
+	margin-left: 10px;
+}
+.body .upload-files-cont a.file-pick {
+	text-decoration: none;
+	color: #622;
+}
+.body .upload-files-cont a.file-pick:hover {
+	color: #c22;
 }
 
 .post .body .assets {
@@ -850,7 +865,10 @@ table.discussions tr.targeted.nsfw {
 .post .body .content {
 	font-size:           1em;
 }
-
+.post .body .content img {
+	max-width: 580px;
+	max-height: 420px;
+}
 
 .me_post {
 	background:          #f8f7f1;

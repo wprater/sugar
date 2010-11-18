@@ -33,7 +33,7 @@ class PostImageUploader < CarrierWave::Uploader::Base
   process :watermark
   process :resize_to_limit => [2000, 2000]
   version :inline_post do
-    process :resize_to_limit => [500, 400]
+    process :resize_to_limit => [580, 420]
   end
 
   def watermark
