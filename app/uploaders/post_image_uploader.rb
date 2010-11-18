@@ -16,11 +16,7 @@ class PostImageUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    if 'production' == ENV['RACK_ENV']
       "forums/"
-    else
-      'public/forums/'
-    end
   end
   
   def cache_dir
@@ -28,7 +24,7 @@ class PostImageUploader < CarrierWave::Uploader::Base
   end
 
   def root
-    Rails.root
+    Rails.root.join('public/')
   end
 
   # enable_processing = false
