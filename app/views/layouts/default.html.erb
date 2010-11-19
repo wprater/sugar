@@ -36,6 +36,9 @@
 		<%= "Sugar.Configuration.hotkeys       = true;" if @current_user && @current_user.keyboard_navigation? %>
 		<%= "Sugar.Configuration.workSafe      = true;" if @current_user && @current_user.work_safe_urls? %>
 		<%= "Sugar.Configuration.FacebookAppId = '#{Sugar.config(:facebook_app_id)}';" if Sugar.config(:facebook_app_id) %>
+    // These is needed for the Flash runtime bug
+		<%= "Sugar.Configuration.session       = '#{cookies[Sugar.config(:session_key)]}';" %>
+		<%= "Sugar.Configuration.sessionKey    = '#{Sugar.config(:session_key)}';" %>
 	</script>
 
 	<%# Custom javascript %>
