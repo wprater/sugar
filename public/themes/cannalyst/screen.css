@@ -699,7 +699,7 @@ table.discussions tr.targeted.nsfw {
 	margin: 0;
 	margin-bottom: 2px;
 	max-width: 580px;
-	font-size: 1.0em;
+	font-size: 12px;
 }
 .upload-files-cont .filelist {
 	margin-top: 5px;
