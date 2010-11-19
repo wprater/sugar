@@ -15,12 +15,11 @@
 
 
     // Handle system events
-    $S.FileUpload.onSugarReady = function(evt) {
+    $($S).bind('ready', function(evt) {
         $S.FileUpload.enhanceInlineImages();
-    };
-    $($S).bind('ready', $.proxy($S.FileUpload, 'onSugarReady'));
+    });
     
-    $S.FileUpload.onSugarRichTextInit = function(evt, tb) {
+    $($S).bind('richtextinit', function(evt, tb) {
         var form = $(tb.textArea).closest('form');
         if ($S.FileUpload.formUsePlugin(form)) {
             if (!$.isFunction(tb.fileUpload)) {
@@ -29,8 +28,7 @@
                 tb.fileUpload.addPostAssetsToFileList();
             }
         }
-    };
-    $($S).bind('richtextinit', $S.FileUpload.onSugarRichTextInit);
+    });
 
     
     // Class methods
