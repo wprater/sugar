@@ -84,15 +84,17 @@ class PostAsset
     !self.file_size.nil?
   end
   
-  def file_size
+  def file_size_human
     help.number_to_human_size(self.read_attribute(:file_size))
   end
+  
+  alias :size :file_size
   
   def url
     self.asset.url
   end
   
   def inline_post_url
-    self.asset.inline_post.url
+    self.asset.md.url
   end
 end
