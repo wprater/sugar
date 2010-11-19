@@ -3,37 +3,52 @@
 
 (function ($S) {
 
-    $($S).bind('ready', function(evt) {
-        // Add href around img to larger image
-        $('.body img.inline-image').each(function() {
-            $(this).wrap($('<a>')
-                .attr('href', 
-                $(this).attr('src').replace('inline_post_', '')));
-        });
-    });
-    
-    // Evey time an RichText widget is built, we attach ourselves to it
-    $($S).bind('richtextinit', function(evt, tb) {
-        if (!$.isFunction(tb.fileUpload)) {
-            tb.fileUpload = new $S.FileUpload(tb);
-        }
-        tb.fileUpload.addPostAssetsToFileList();
-    });
-    
-    // Listen for live posts and reset form 
-    $($S).bind('livepostsuccess', function(evt, submitForm) {
-        $(submitForm).find('textarea.rich').each(function () {
-            this.toolbar.fileUpload.resetForm();
-        });
-    });
-    
-    
     $S.FileUpload = function(tb) {
         this.tb = tb;
-        
         this.init();
     };
     
+    $S.FileUpload.ENABLE_PLUGIN_ATTR    = 'data-tb-imageupload';
+    $S.FileUpload.INLINE_VERSION_NAME   = 'md';
+
+
+    // Handle system events
+    $S.FileUpload.onSugarReady = function(evt) {
+        $S.FileUpload.enhanceInlineImages();
+    };
+    $($S).bind('ready', $.proxy($S.FileUpload, 'onSugarReady'));
+    
+    $S.FileUpload.onSugarRichTextInit = function(evt, tb) {
+        if ($S.FileUpload.formUsePlugin($(tb.textArea).closest('form'))) {
+            if (!$.isFunction(tb.fileUpload)) {
+                tb.fileUpload = new $S.FileUpload(tb);
+            } else {
+                tb.fileUpload.addPostAssetsToFileList();
+            }
+        }
+    };
+    $($S).bind('richtextinit', $S.FileUpload.onSugarRichTextInit);
+
+    
+    // Class methods
+    $S.FileUpload.formUsePlugin = function(form) {
+        var usePlugin = form.attr($S.FileUpload.ENABLE_PLUGIN_ATTR);
+        return (usePlugin === 'true' || usePlugin === '1');
+    };
+    
+    $S.FileUpload.enhanceInlineImages = function() {
+        // Add href around img to larger image if it does not already exists
+        $('.post .content img[src^=/forum/images], .content img[src^=https?://s3.cannaimages.com]').each(function() {
+            if ($(this).parent().is('a')) { return; }
+            
+            $(this).wrap($('<a>')
+                    .attr('href', $(this).attr('src').replace($S.FileUpload.INLINE_VERSION_NAME + '_', ''))
+                    .attr('data-hosted-image', true));
+        });
+    };
+    
+    
+    // Public instance methods
     $S.FileUpload.prototype.init = function() {
         this.exchangeForm   = $(this.tb.textArea).closest('form');
         this.objectName     = this.exchangeForm.find('input[name=object_name]').first().value;
@@ -62,6 +77,8 @@
         this.uploader.bind('StateChanged',  $.proxy(this.onUploadStateChanged, this));
 
         this.exchangeForm.bind('submit', $.proxy(this.onFormSubmit, this));
+        $($S).bind('livepostsuccess', $.proxy(this.onSugarLivePostSuccess, this));
+        $(Sugar).bind('postsloaded', $.proxy(this.onSugarPostsLoaded, this));
     };
     
     $S.FileUpload.prototype.setupInterface = function() {
@@ -157,7 +174,7 @@
             $('#' + file.id).append($('<a class="post-insert">').html('Insert into post'))
                 .click($.proxy(function(evt) {
                     evt.preventDefault();
-                    this.insertImageIntoTextArea(response)
+                    this.insertImageIntoTextArea(response);
                 }, this));
         }
         
@@ -211,13 +228,22 @@
             this.exchangeForm.unbind('submit');
             this.exchangeForm.submit();
         }
-    }
+    };
+    
+    $S.FileUpload.prototype.onSugarLivePostSuccess = function(evt, submitForm) {
+        // $S.FileUpload.enhanceInlineImages.delay(1000);
+        this.resetForm();
+    };
+
+    $S.FileUpload.prototype.onSugarPostsLoaded = function(evt) {
+        $S.FileUpload.enhanceInlineImages();
+    };
     
     $S.FileUpload.prototype.addUploadedFilesArea = function(tb) {
         var container = document.createElement('div');
         this.uploadContainer = $(container).attr('id', this.uploadContainerId).addClass('upload-files-cont')
             .insertAfter(this.tb.listElement)
-            .append('<div class="filelist" />')
+            .append('<div class="filelist">')
             .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file..</a>');
 
         this.uploadContainer.find('.uploadfiles').hide()
@@ -236,6 +262,8 @@
     $S.FileUpload.prototype.onButtonClick = function(evt) {
         $(evt.target).toggleClass('active');
         this.uploadContainer.toggle();
+        // If container is shown then show upload form
+        // $('#' + this.filePickId).trigger('click');
     };
     
     $S.FileUpload.prototype.uploadsFinished = function() {
@@ -247,7 +275,7 @@
         this.tb.textArea.replaceSelection($('<div>').append(
             $('<img>').attr('src', fileInfo.inline_post_url)
                       .attr('alt', fileInfo.name)
-                      .addClass('inline-image').clone()).remove().html()
+                      .clone()).remove().html()
         );
     };
     
