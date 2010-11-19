@@ -29,7 +29,7 @@ class PostAssetUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   def filename
-    "#{self.model.id}_#{original_filename}" if original_filename
+    "#{self.model.id.to_s[0..4]}_#{original_filename}" if original_filename
   end
 
 end
