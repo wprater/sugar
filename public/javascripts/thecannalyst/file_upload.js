@@ -164,6 +164,7 @@
             $('#' + asset.id + " .progress").hide();
             this.insertImageEmbedLink(asset.id, asset);
         }, this));
+        postAssets.empty();
         
         return true;
     };
@@ -189,7 +190,7 @@
 
         // If we're waiting to submit the form until all the files are done uploading
         if (this.submitAfterUpload && this.uploadsFinished()) {
-            this.exchangeFormSubmit();
+            this.exchangeFormSubmit(this.exchangeForm);
             this.hideUploadingSpinner();
         }
     };

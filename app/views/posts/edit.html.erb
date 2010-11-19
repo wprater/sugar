@@ -18,8 +18,9 @@
   <%# @post.tmp_asset_ids.each do |tmp_asset_id| %> 
     <%# hidden_field_tag 'post[tmp_asset_ids][]', tmp_asset_id %>
   <%# end unless @post.tmp_asset_ids.nil? %>
-  <%= f.text_area :assets, 
-                  :value => @post.assets.to_json(:only => [:name, :asset_type], :methods => [:id, :size]), 
+  <%= text_area_tag 'post_assets', 
+                  @post.assets.to_json(:only => [:name, :asset_type], 
+                                                 :methods => [:id, :size, :inline_post_url]), 
                   :id => "post-assets-#{@post.id}", 
                   :class => 'post-assets', 
                   :style => 'display:none' %>
