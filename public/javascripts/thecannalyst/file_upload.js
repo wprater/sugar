@@ -3,8 +3,10 @@
 
 (function ($S) {
 
-    $S.FileUpload = function(tb) {
+    $S.FileUpload = function(tb, form) {
         this.tb = tb;
+        this.exchangeForm = form;
+        
         this.init();
     };
     
@@ -19,9 +21,10 @@
     $($S).bind('ready', $.proxy($S.FileUpload, 'onSugarReady'));
     
     $S.FileUpload.onSugarRichTextInit = function(evt, tb) {
-        if ($S.FileUpload.formUsePlugin($(tb.textArea).closest('form'))) {
+        var form = $(tb.textArea).closest('form');
+        if ($S.FileUpload.formUsePlugin(form)) {
             if (!$.isFunction(tb.fileUpload)) {
-                tb.fileUpload = new $S.FileUpload(tb);
+                tb.fileUpload = new $S.FileUpload(tb, form);
             } else {
                 tb.fileUpload.addPostAssetsToFileList();
             }
@@ -50,8 +53,9 @@
     
     // Public instance methods
     $S.FileUpload.prototype.init = function() {
-        this.exchangeForm   = $(this.tb.textArea).closest('form');
-        this.objectName     = this.exchangeForm.find('input[name=object_name]').first().value;
+        this.exchangeForm   = this.exchangeForm || $(this.tb.textArea).closest('form');
+        // TODO get objectName from the from href or id
+        this.objectName     = this.exchangeForm.find('input[name=object_name]').first().val();
         this.postId         = this.exchangeForm.find('input[name=post_id]').first().val();
         this.submitAfterUpload = false;
         
