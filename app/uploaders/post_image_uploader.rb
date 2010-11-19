@@ -16,7 +16,7 @@ class PostImageUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-      "forums/"
+      "forum/images/"
   end
   
   def cache_dir
@@ -32,8 +32,11 @@ class PostImageUploader < CarrierWave::Uploader::Base
   # they should not be larger than
   process :watermark
   process :resize_to_limit => [2000, 2000]
-  version :inline_post do
+  version :md do
     process :resize_to_limit => [580, 420]
+  end
+  version :sq do
+    process :resize_to_limit => [80, 80]
   end
 
   def watermark
