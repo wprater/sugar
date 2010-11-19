@@ -90,14 +90,14 @@
     
     $S.FileUpload.prototype.resetForm = function() {
         // Close uploaded pane and reset interface
-        $(this.tb.buttons).find('a.' + this.tb.getButtonName(this.imageUploadButtonName)).trigger('click');
         this.resetUploadedFilesArea();
         this.exchangeForm.find('.post_tmp_asset_ids').remove();
+        $(this.tb.buttons).find('a.' + this.tb.getButtonName(this.imageUploadButtonName)).trigger('click');
     };
     
     $S.FileUpload.prototype.initUploader = function() {
         this.uploader = new plupload.Uploader({
-            runtimes : 'html5,flash,silverlight,browserplus',
+            runtimes : 'html5,flash,silverlight',
             browse_button : this.filePickId,
             container : this.uploadContainerId,
             max_file_size : '70mb',
@@ -118,6 +118,9 @@
                 post_id: this.postId ? this.postId : ''
             }
         });
+        // This is needed for the Flash runtime bug
+        this.uploader.settings['multipart_params'][Sugar.Configuration.sessionKey] = Sugar.Configuration.session;
+
         this.uploader.init();
     };
     
@@ -139,8 +142,6 @@
         }, this));
         up.refresh(); // Reposition Flash/Silverlight
         this.uploader.start();
-        
-        this.uploadContainer.find(".uploadfiles").show();
     };
     
     $S.FileUpload.prototype.addFileToList = function(file) {
@@ -233,7 +234,6 @@
     };
     
     $S.FileUpload.prototype.onSugarLivePostSuccess = function(evt, submitForm) {
-        // $S.FileUpload.enhanceInlineImages.delay(1000);
         this.resetForm();
     };
 
@@ -246,15 +246,12 @@
         this.uploadContainer = $(container).attr('id', this.uploadContainerId).addClass('upload-files-cont')
             .insertAfter(this.tb.listElement)
             .append('<div class="filelist">')
-            .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file..</a>');
-
-        this.uploadContainer.find('.uploadfiles').hide()
-            .click($.proxy(this.onUploadFilesClick, this));
+            .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file(s)..</a>');
     };
 
     $S.FileUpload.prototype.resetUploadedFilesArea = function(tb) {
-        this.uploadContainer.find('.filelist .file').remove();
-        this.uploadContainer.find('.uploadfiles').hide();
+        this.uploadContainer.find('.filelist').empty();
+        this.uploader.refresh(); // Reposition uploader shim
     };
     
     $S.FileUpload.prototype.addUploadImageToolbarButton = function() {
@@ -264,8 +261,6 @@
     $S.FileUpload.prototype.onButtonClick = function(evt) {
         $(evt.target).toggleClass('active');
         this.uploadContainer.toggle();
-        // If container is shown then show upload form
-        // $('#' + this.filePickId).trigger('click');
     };
     
     $S.FileUpload.prototype.uploadsFinished = function() {
