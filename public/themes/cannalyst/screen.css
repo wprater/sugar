@@ -699,6 +699,7 @@ table.discussions tr.targeted.nsfw {
 	margin: 0;
 	margin-bottom: 2px;
 	max-width: 580px;
+	font-size: 1.0em;
 }
 .upload-files-cont .filelist {
 	margin-top: 5px;
@@ -737,6 +738,7 @@ table.discussions tr.targeted.nsfw {
 .filelist .post-insert {
 	margin-left: 10px;
 }
+
 .body .upload-files-cont a.file-pick {
 	text-decoration: none;
 	color: #622;
@@ -868,6 +870,8 @@ table.discussions tr.targeted.nsfw {
 .post .body .content img {
 	max-width: 580px;
 	max-height: 420px;
+	margin: 10px;
+	margin-left: 0;
 }
 
 .me_post {
