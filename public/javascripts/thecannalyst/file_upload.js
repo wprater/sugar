@@ -65,8 +65,10 @@
         this.initUploader();
         this.setupEvents();
         
-        // Must hide after uploader is inited
-        this.uploadContainer.hide();
+        // If there were no assets for form, hide uploadContainer panel
+        if (this.exchangeForm.find('.post-assets').length == 0) {
+            this.uploadContainer.hide();
+        }
     };
     
     $S.FileUpload.prototype.setupEvents = function() {
@@ -86,6 +88,7 @@
     $S.FileUpload.prototype.setupInterface = function() {
         this.addUploadedFilesArea();
         this.addUploadImageToolbarButton();
+        this.addPostAssetsToFileList();
     };
     
     $S.FileUpload.prototype.resetForm = function() {
@@ -153,13 +156,16 @@
     };
     
     $S.FileUpload.prototype.addPostAssetsToFileList = function() {
-        var postAssets = this.exchangeForm.find('.post_tmp_asset_ids');
-        if (postAssets.length === 0) { return; }
+        var postAssets = this.exchangeForm.find('.post-assets');
+        if (postAssets.length === 0) { return false; }
         
-        postAssets.each($.proxy(function(idx, asset) {
+        $($.parseJSON(postAssets.text())).each($.proxy(function(idx, asset) {
             this.addFileToList(asset);
+            $('#' + asset.id + " .progress").hide();
+            this.insertImageEmbedLink(asset.id, asset);
         }, this));
-        this.uploader.refresh();
+        
+        return true;
     };
     
     $S.FileUpload.prototype.onUploadProgress = function(up, file) {
@@ -170,16 +176,8 @@
     $S.FileUpload.prototype.onFileUploaded = function(up, file, res) {
         var response = $.parseJSON(res.response);
         
-        // $('#' + file.id + " span").html("100%");
         $('#' + file.id + " .progress").hide();
-
-        if ('image' === response.asset_type) {
-            $('#' + file.id).append($('<a class="post-insert">').html('Insert into post'))
-                .click($.proxy(function(evt) {
-                    evt.preventDefault();
-                    this.insertImageIntoTextArea(response);
-                }, this));
-        }
+        this.insertImageEmbedLink(file.id, response);
         
         // Insert hidden field with asset_id
         this.exchangeForm.prepend($("<input />")
@@ -193,6 +191,17 @@
         if (this.submitAfterUpload && this.uploadsFinished()) {
             this.exchangeFormSubmit();
             this.hideUploadingSpinner();
+        }
+    };
+    
+    $S.FileUpload.prototype.insertImageEmbedLink = function(fileId, fileInfo) {
+        if ('image' === fileInfo.asset_type) {
+            $('#' + fileId).append($('<a class="post-insert">')
+                .html('Insert into post'))
+                .click($.proxy(function(evt) {
+                    evt.preventDefault();
+                    this.insertImageIntoTextArea(fileInfo);
+                }, this));
         }
     };
     
