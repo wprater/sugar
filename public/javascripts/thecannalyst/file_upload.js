@@ -17,6 +17,7 @@
         if (!$.isFunction(tb.fileUpload)) {
             tb.fileUpload = new $S.FileUpload(tb);
         }
+        tb.fileUpload.addPostAssetsToFileList();
     });
     
     // Listen for live posts and reset form 
@@ -35,7 +36,7 @@
     
     $S.FileUpload.prototype.init = function() {
         this.exchangeForm   = $(this.tb.textArea).closest('form');
-        this.objectName     = this.exchangeForm.find('input[name=object_name]')[0].value;
+        this.objectName     = this.exchangeForm.find('input[name=object_name]').first().value;
         this.postId         = this.exchangeForm.find('input[name=post_id]').first().val();
         this.submitAfterUpload = false;
         
@@ -114,17 +115,31 @@
     };
     
     $S.FileUpload.prototype.onFilesAdded = function(up, files) {
-        $.each(files, $.proxy(function(i, file) {
-            this.uploadContainer.find('.filelist').prepend($('<div>')
-                .addClass('file').attr('id', file.id)
-                .html(file.name + ' (' + plupload.formatSize(file.size) + ')')
-                .append('<span class="progress"><span class="inner"></span>')
-            );
+        $.each(files, $.proxy(function(idx, file) {
+            this.addFileToList(file);
         }, this));
         up.refresh(); // Reposition Flash/Silverlight
         this.uploader.start();
         
         this.uploadContainer.find(".uploadfiles").show();
+    };
+    
+    $S.FileUpload.prototype.addFileToList = function(file) {
+        this.uploadContainer.find('.filelist').prepend($('<div>')
+            .addClass('file').attr('id', file.id)
+            .html(file.name + ' (' + plupload.formatSize(file.size) + ')')
+            .append('<span class="progress"><span class="inner"></span>')
+        );
+    };
+    
+    $S.FileUpload.prototype.addPostAssetsToFileList = function() {
+        var postAssets = this.exchangeForm.find('.post_tmp_asset_ids');
+        if (postAssets.length === 0) { return; }
+        
+        postAssets.each($.proxy(function(idx, asset) {
+            this.addFileToList(asset);
+        }, this));
+        this.uploader.refresh();
     };
     
     $S.FileUpload.prototype.onUploadProgress = function(up, file) {
