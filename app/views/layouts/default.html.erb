@@ -6,6 +6,7 @@
 
 	<%# Stylesheet %>
 	<%= stylesheet_link_tag 'syntax/twilight' %>
+	<%= stylesheet_link_tag '/javascripts/vendor/fancybox/jquery.fancybox-1.3.4.css' %>
 	<% if @current_user && @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else %>
@@ -21,7 +22,8 @@
 			scripts  = %w{jquery-1.4.4.min jquery.scrollTo jquery.autocomplete jquery.libraries}.map{|s| "vendor/#{s}"}
 			scripts += %w{swfobject soundmanager2}.map{|s| "vendor/#{s}"}
 			scripts += %w{plupload.full.min}.map{|s| "vendor/plupload/#{s}"}
-      # scripts += %w{sugar maps mp3player posts hotkeys facebook file_upload}.map{|s| "sugar/#{s}"}
+			scripts += %w{jquery.fancybox-1.3.4.pack jquery.mousewheel-3.0.4.pack}.map{|s| "vendor/fancybox/#{s}"}
+      # scripts += %w{sugar maps mp3player posts hotkeys facebook}.map{|s| "sugar/#{s}"}
 			scripts += %w{sugar maps mp3player posts facebook}.map{|s| "sugar/#{s}"}
 			scripts += %w{file_upload rich_toolbar}.map{|s| "thecannalyst/#{s}"}
 			scripts += %w{application}
