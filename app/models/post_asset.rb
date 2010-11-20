@@ -96,9 +96,9 @@ class PostAsset
   
   def urls
     returning urls = {} do
-      urls[:sq_url] = self.asset.sq.url if self.is_image?
-      urls[:inline_post_url] = self.asset.md.url if self.is_image?
-      urls[:url] = self.asset.url
+      urls[:sq] = self.asset.sq.url if self.is_image?
+      urls[:md] = self.asset.md.url if self.is_image?
+      urls[:lg] = self.asset.url
     end
   end
   
