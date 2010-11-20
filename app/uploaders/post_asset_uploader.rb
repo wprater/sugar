@@ -7,22 +7,29 @@ class PostAssetUploader < CarrierWave::Uploader::Base
   # include CarrierWave::ImageScience
 
   # Choose what kind of storage to use for this uploader:
-  # storage :file
-  storage :s3
+  if 'production' == ENV['RACK_ENV']
+    storage :s3
+  else
+    storage :file
+  end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "forums/"
+      "forum/assets/"
   end
-
+    
   def cache_dir
     Rails.root.join('tmp/uploads/')
   end
 
+  def root
+    Rails.root.join('public/')
+  end
+
   # Override the filename of the uploaded files:
   def filename
-    "#{self.model.id}_#{original_filename}" if original_filename
+    "#{self.model.id.to_s[0..4]}_#{original_filename}" if original_filename
   end
 
 end

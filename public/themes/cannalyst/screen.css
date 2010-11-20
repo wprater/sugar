@@ -688,25 +688,93 @@ table.discussions tr.targeted.nsfw {
 /* -----------------------------------------------------------------------
    POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
-#filelist {
-	padding: 5px 10px;
+
+/* @group Asset Upload Plugin */
+
+.upload-files-cont {
+	padding: 10px 10px 0;
 	background: #f6f6f6;
 	border: 1px solid #d7d7d7;
 	background-color: #F6F6F6;
 	margin: 0;
 	margin-bottom: 2px;
 	max-width: 580px;
+	font-size: 12px;
 }
-#pick-file {
-	cursor: pointer;
+.upload-files-cont .filelist {
+	margin-top: 10px;
 }
-#upload-files-cont {
+.upload-files-cont .filelist .file {
+	margin-bottom: 5px;
+}
+.upload-files-cont .filelist .file:last-child {
+	margin-bottom: 10px;
+}
+.filelist .file img.thumb {
+	width: 24px;
+	height: 24px;
+	margin-right: 5px;
+	vertical-align: bottom;
+}
+.upload-files-cont .uploadfiles {
 	margin-top: 5px;
 }
-#uploadfiles {
-	display: block;
-	margin-top: 15px;
+.filelist .progress,
+.filelist .progress .inner {
+	display: inline-block;
+	height: 10px;
 }
+.filelist .progress {
+	position: relative;
+	width: 100px;
+	border: 1px solid #d7d7d7;
+	margin: 0 5px;
+	margin-bottom: 2px;
+	vertical-align: bottom;
+}
+.filelist .progress .inner {
+	position: absolute;
+	display: inline-block;
+	width: 10%;
+	background: rgba(0,0,0,0.2);
+}
+.filelist .post-insert {
+	margin-left: 10px;
+}
+
+.body .upload-files-cont a.file-pick {
+	text-decoration: none;
+	color: #622;
+}
+.body .upload-files-cont a.file-pick:hover {
+	color: #c22;
+}
+
+.post .body .assets {
+	background-color: #f6f6f6;
+	margin-top: 5px;
+	padding: 5px 0 0 5px;
+}
+.post .body .assets img.mime-type {
+	width: 16px;
+	height: 16px;
+	margin-right: 2px;
+	background: url(images/mime_sprite.png) no-repeat 0 0;
+	vertical-align: bottom;
+}
+.post .body .assets img.mime-type.image { background-position: 0 -16px; }
+.post .body .assets img.mime-type.pdf 	{ background-position: 0 -64px; }
+.post .body .assets img.mime-type.video { background-position: 0 -112px; }
+
+.post .body .assets p {
+	font-size: 0.9em;
+	margin: 0;
+	padding-bottom: 6px;
+}
+
+
+/* @end */
+
 
 .posts {
 	border-top:          1px solid #E2DCBF;
@@ -802,25 +870,11 @@ table.discussions tr.targeted.nsfw {
 .post .body .content {
 	font-size:           1em;
 }
-
-.post .body .assets {
-	background-color: #f6f6f6;
-	padding: 9px;
-}
-.post .body .assets img.mime-type {
-	width: 16px;
-	height: 16px;
-	margin-right: 2px;
-	background: url(images/mime_sprite.png) no-repeat 0 0;
-	vertical-align: bottom;
-}
-.post .body .assets img.mime-type.png { background-position: 0 -16px; }
-.post .body .assets img.mime-type.pdf { background-position: 0 -64px; }
-
-.post .body .assets p {
-	font-size: 0.9em;
-	margin: 0;
-	padding-bottom: 6px;
+.post .body .content img {
+	max-width: 580px;
+	max-height: 420px;
+	margin: 10px;
+	margin-left: 0;
 }
 
 .me_post {

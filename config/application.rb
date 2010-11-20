@@ -13,7 +13,10 @@ module Sugar
 		# -- all .rb files in that directory are automatically loaded.
 
 		# Custom directories with classes and modules you want to be autoloadable.
-		config.autoload_paths += %W( #{config.root}/lib )
+    config.autoload_paths += %W( #{config.root}/lib )
+    %w(observers mailers middleware).each do |dir|
+      config.autoload_paths << "#{config.root}/app/#{dir}"
+    end
 
 		# Only load the plugins named here, in the order given (default is alphabetical).
 		# :all can be used as a placeholder for all plugins not explicitly named.
@@ -39,9 +42,7 @@ module Sugar
 		# Configure sensitive parameters which will be filtered from the log file.
 		config.filter_parameters += [:password, :drawing]
 		
-    # require 'thinkingtank/init'
-    
-    require 'lib/config_store'
+    require 'config_store'
     config_store = ConfigStore.new("#{ENV['HOME']}/Development/.s3") unless 'production' == ENV['RACK_ENV']
     CarrierWave.configure do |config|
       config.s3_access_key_id     = ENV['S3_KEY'] || config_store['s3_access_key_id']
@@ -49,7 +50,7 @@ module Sugar
       config.s3_bucket            = ENV['S3_BUCKET'] || 'thecannalyst'
       config.s3_headers           = { 'Expires' => "#{(Time.now + 60*60*24*365).httpdate}" }
     end
-    
+
 	end
 end
 
