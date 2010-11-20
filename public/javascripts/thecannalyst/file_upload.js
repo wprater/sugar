@@ -112,14 +112,14 @@
             runtimes : 'html5,flash,silverlight',
             browse_button : this.filePickId,
             container : this.uploadContainerId,
-            max_file_size : '70mb',
+            max_file_size : '15mb',
             url : this.exchangeForm.attr('action') + '/file_upload',
             flash_swf_url : '/javascripts/vendor/plupload/plupload.flash.swf',
             silverlight_xap_url : '/javascripts/vendor/plupload/plupload.silverlight.xap',
             filters : [
                 {title : "Image files", extensions : "jpeg,jpg,gif,png"},
                 {title : "Pdf files", extensions : "pdf"},
-                {title : "Video files", extensions : "mov,m4v,avi,mp4"},
+                // {title : "Video files", extensions : "mov,m4v,avi,mp4"},
                 // TODO virus scanning
                 {title : "Other files", extensions : "doc,txt,docx,xls"},
                 {title : "Zip files", extensions : "zip"}
