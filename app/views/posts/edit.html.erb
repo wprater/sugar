@@ -20,7 +20,7 @@
   <%# end unless @post.tmp_asset_ids.nil? %>
   <%= text_area_tag 'post_assets', 
                   @post.assets.to_json(:only => [:name, :asset_type], 
-                                                 :methods => [:id, :size, :inline_post_url]), 
+                                                 :methods => [:id, :size, :urls]), 
                   :id => "post-assets-#{@post.id}", 
                   :class => 'post-assets', 
                   :style => 'display:none' %>

@@ -15,6 +15,14 @@ Feeds/JSON API:
 * Finish JSON and XML API
 * RSS/Atom feeds for everything
 
+Image/File Uploads:
+
+* Process image store and processing to a Delayed Job
+* Inline image links should be uploaded as a PostAsset, so we can watermark and/or control sizing
+* Make sure images that are inline posts cannot be great than a set width or height
+* View as gallery for all images in the forum
+* Cleanup temp records/assets in post_assets
+
 Themes:
 
 * Make a standard theme format

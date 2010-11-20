@@ -75,7 +75,8 @@
     		  <div class="assets">
       		  <% post.assets.each do |asset| %>
       		    <p><img class="mime-type <%= asset.mime_type.media_type %> <%= asset.mime_type.sub_type %>" src="/images/empty.gif">
-      		      <a href="<%= asset.url %>"><%= asset.name %></a> <%= "(#{asset.file_size_human})" if asset.file_size? %></p>
+      		      <a class="<%= 'use-gallery' if asset.is_image? %>" <%= raw "rel=\"gallery-#{post.id}\"" if asset.is_image? %> 
+      		         href="<%= asset.url %>"><%= asset.name %></a> <%= "(#{asset.file_size_human})" if asset.file_size? %></p>
       		  <% end %>
     		  </div>
     		<% end %>

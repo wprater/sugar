@@ -12,6 +12,7 @@
     
     $S.FileUpload.ENABLE_PLUGIN_ATTR    = 'data-tb-imageupload';
     $S.FileUpload.INLINE_VERSION_NAME   = 'md';
+    $S.FileUpload.LIGHTBOX_OPTS         = { overlayOpacity: 0.4 };
 
 
     // Handle system events
@@ -38,14 +39,16 @@
     };
     
     $S.FileUpload.enhanceInlineImages = function() {
-        // Add href around img to larger image if it does not already exists
-        $('.post .content img[src^=/forum/images], .content img[src^=https?://s3.cannaimages.com]').each(function() {
-            if ($(this).parent().is('a')) { return; }
-            
-            $(this).wrap($('<a>')
+        // Add href around img to larger image, also to be used for a lightbox
+        $('.post .content img[src^=/forum/images], .post .content img[src^=https?://s3.cannaimages.com]')
+            .each(function() {
+                // Continue if it's already wrapped in an anchor tag
+                if ($(this).parent().is('a')) { return; }
+                $(this).wrap($('<a>')
+                    // Remove the version tag
                     .attr('href', $(this).attr('src').replace($S.FileUpload.INLINE_VERSION_NAME + '_', ''))
-                    .attr('data-hosted-image', true));
-        });
+                    .fancybox($S.FileUpload.LIGHTBOX_OPTS));
+            });
     };
     
     
@@ -63,6 +66,7 @@
         
         this.setupInterface();
         this.initUploader();
+        this.initLightbox();
         this.setupEvents();
         
         // If there were no assets for form, hide uploadContainer panel
@@ -81,8 +85,13 @@
         this.uploader.bind('StateChanged',  $.proxy(this.onUploadStateChanged, this));
 
         this.exchangeForm.bind('submit', $.proxy(this.onFormSubmit, this));
-        $($S).bind('livepostsuccess', $.proxy(this.onSugarLivePostSuccess, this));
+        $(Sugar).bind('livepostsuccess', $.proxy(this.onSugarLivePostSuccess, this));
+        // Called after posts are loaded from AJAX
         $(Sugar).bind('postsloaded', $.proxy(this.onSugarPostsLoaded, this));
+    };
+    
+    $S.FileUpload.prototype.initLightbox = function() {
+        $('.assets a.use-gallery').fancybox($S.FileUpload.LIGHTBOX_OPTS);
     };
     
     $S.FileUpload.prototype.setupInterface = function() {
@@ -179,13 +188,13 @@
         
         $('#' + file.id + " .progress").hide();
         this.insertImageEmbedLink(file.id, response);
-        
+
         // Insert hidden field with asset_id
         this.exchangeForm.prepend($("<input />")
             .attr("type","hidden")
             .addClass('post_tmp_asset_ids')
             .attr("name", this.objectName + '[tmp_asset_ids][]')
-            .val(response._id)
+            .val(response.id)
         );
 
         // If we're waiting to submit the form until all the files are done uploading
@@ -196,6 +205,10 @@
     };
     
     $S.FileUpload.prototype.insertImageEmbedLink = function(fileId, fileInfo) {
+        var thumbSrc = ('image' === fileInfo.asset_type) ? fileInfo.urls.sq : '/images/empty.gif';
+        var thumb = $('<img>').attr('src', thumbSrc).addClass('thumb');
+        $('#' + fileId).prepend(thumb);
+            
         if ('image' === fileInfo.asset_type) {
             $('#' + fileId).append($('<a class="post-insert">')
                 .html('Insert into post'))
@@ -246,7 +259,7 @@
     $S.FileUpload.prototype.onSugarLivePostSuccess = function(evt, submitForm) {
         this.resetForm();
     };
-
+    
     $S.FileUpload.prototype.onSugarPostsLoaded = function(evt) {
         $S.FileUpload.enhanceInlineImages();
     };
@@ -255,8 +268,8 @@
         var container = document.createElement('div');
         this.uploadContainer = $(container).attr('id', this.uploadContainerId).addClass('upload-files-cont')
             .insertAfter(this.tb.listElement)
-            .append('<div class="filelist">')
-            .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file(s)..</a>');
+            .append('<a id="' + this.filePickId + '" class="file-pick" href="#">Attach or upload file(s)..</a>')
+            .append('<div class="filelist">');
     };
 
     $S.FileUpload.prototype.resetUploadedFilesArea = function(tb) {
@@ -280,7 +293,7 @@
     $S.FileUpload.prototype.insertImageIntoTextArea = function(fileInfo) {
         var selection = this.tb.textArea.selectedText();
         this.tb.textArea.replaceSelection($('<div>').append(
-            $('<img>').attr('src', fileInfo.inline_post_url)
+            $('<img>').attr('src', fileInfo.urls.md)
                       .attr('alt', fileInfo.name)
                       .clone()).remove().html()
         );
